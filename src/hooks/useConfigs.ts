@@ -31,7 +31,7 @@ export function useConfigs(): UseConfigsReturn {
         setError(result.error);
       }
     } catch (err) {
-      setError('获取配置列表失败');
+      setError('获取配置列表失败，请检查REDIS_URL是否配置正确');
       console.error('获取配置列表失败:', err);
     } finally {
       setLoading(false);

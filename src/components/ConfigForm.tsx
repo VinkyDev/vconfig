@@ -7,7 +7,6 @@ import {
   Input,
   Select,
   Button,
-  Space,
   Tag,
   message,
   Flex,
@@ -186,6 +185,7 @@ export default function ConfigForm({
       onCancel={handleClose}
       footer={null}
       width={800}
+      centered
       destroyOnHidden
     >
       <Form

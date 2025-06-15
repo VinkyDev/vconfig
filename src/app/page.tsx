@@ -21,10 +21,12 @@ import {
   ReloadOutlined,
   SettingOutlined,
   DatabaseOutlined,
+  ApiOutlined,
 } from "@ant-design/icons";
 import { useConfigs } from "@/hooks/useConfigs";
 import ConfigForm from "@/components/ConfigForm";
 import ConfigList from "@/components/ConfigList";
+import ApiTester from "@/components/ApiTester";
 import { ConfigItem } from "@/types/config";
 
 const { Header, Content } = Layout;
@@ -47,6 +49,7 @@ export default function Home() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showApiTester, setShowApiTester] = useState(false);
   const [editingConfig, setEditingConfig] = useState<ConfigItem | null>(null);
   const [selectedConfigs, setSelectedConfigs] = useState<string[]>([]);
 
@@ -137,18 +140,12 @@ export default function Home() {
             <Flex align="center" gap="middle">
               <Flex align="center" gap="small">
                 <DatabaseOutlined
-                  style={{ fontSize: 32, color: token.colorPrimary }}
+                  style={{ fontSize: 26, color: token.colorPrimary }}
                 />
-                <Title level={3} style={{ margin: 0, color: token.colorText }}>
-                  动态配置中心
+                <Title level={4} style={{ margin: 0, color: token.colorText }}>
+                  VConfig - 动态配置中心
                 </Title>
               </Flex>
-              <Space align="center">
-                <SettingOutlined style={{ color: token.colorTextSecondary }} />
-                <Text type="secondary" style={{ display: "none" }}>
-                  配置管理系统
-                </Text>
-              </Space>
             </Flex>
             <Text type="secondary">共 {configs.length} 个配置</Text>
           </Flex>
@@ -172,6 +169,13 @@ export default function Home() {
                     onClick={() => setShowCreateForm(true)}
                   >
                     新建配置
+                  </Button>
+
+                  <Button
+                    icon={<ApiOutlined />}
+                    onClick={() => setShowApiTester(true)}
+                  >
+                    API 测试
                   </Button>
 
                   {selectedConfigs.length > 0 && (
@@ -266,6 +270,12 @@ export default function Home() {
           onSubmit={handleEditSubmit}
           editingConfig={editingConfig}
           title="编辑配置"
+        />
+
+        {/* API测试器 */}
+        <ApiTester
+          open={showApiTester}
+          onClose={() => setShowApiTester(false)}
         />
       </Layout>
     </ConfigProvider>
