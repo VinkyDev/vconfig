@@ -5,10 +5,11 @@ import { UpdateConfigRequest } from '@/types/config';
 // GET /api/configs/[key] - 获取单个配置
 export async function GET(
   request: NextRequest,
-  { params }: { params: { key: string } }
+  { params }: { params: Promise<{ key: string }> }
 ) {
   try {
-    const config = await ConfigService.getConfig(params.key);
+    const { key } = await params;
+    const config = await ConfigService.getConfig(key);
     
     if (!config) {
       return NextResponse.json({
@@ -33,9 +34,10 @@ export async function GET(
 // PUT /api/configs/[key] - 更新配置
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { key: string } }
+  { params }: { params: Promise<{ key: string }> }
 ) {
   try {
+    const { key } = await params;
     const body: UpdateConfigRequest = await request.json();
     
     // 验证必需字段
@@ -46,7 +48,7 @@ export async function PUT(
       }, { status: 400 });
     }
 
-    const config = await ConfigService.updateConfig(params.key, body);
+    const config = await ConfigService.updateConfig(key, body);
     
     return NextResponse.json({
       success: true,
@@ -65,10 +67,11 @@ export async function PUT(
 // DELETE /api/configs/[key] - 删除配置
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { key: string } }
+  { params }: { params: Promise<{ key: string }> }
 ) {
   try {
-    await ConfigService.deleteConfig(params.key);
+    const { key } = await params;
+    await ConfigService.deleteConfig(key);
     
     return NextResponse.json({
       success: true,

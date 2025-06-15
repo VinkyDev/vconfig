@@ -144,8 +144,12 @@ export default function ApiTester({ open, onClose }: ApiTesterProps) {
             params.append(key, String(value));
           });
           url += `?${params.toString()}`;
-        } catch (e) {
-          // 忽略JSON解析错误
+        } catch (error) {
+          message.error(
+            `JSON解析错误: ${
+              error instanceof Error ? error.message : "未知错误"
+            }`
+          );
         }
       }
 
@@ -172,7 +176,9 @@ export default function ApiTester({ open, onClose }: ApiTesterProps) {
         });
       }, 2000);
     } catch (error) {
-      message.error("复制失败");
+      message.error(
+        `复制失败: ${error instanceof Error ? error.message : "未知错误"}`
+      );
     }
   };
 

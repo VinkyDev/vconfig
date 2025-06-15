@@ -19,7 +19,6 @@ import {
   SearchOutlined,
   DeleteOutlined,
   ReloadOutlined,
-  SettingOutlined,
   DatabaseOutlined,
   ApiOutlined,
 } from "@ant-design/icons";
@@ -27,7 +26,11 @@ import { useConfigs } from "@/hooks/useConfigs";
 import ConfigForm from "@/components/ConfigForm";
 import ConfigList from "@/components/ConfigList";
 import ApiTester from "@/components/ApiTester";
-import { ConfigItem } from "@/types/config";
+import {
+  ConfigItem,
+  CreateConfigRequest,
+  UpdateConfigRequest,
+} from "@/types/config";
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -92,7 +95,7 @@ export default function Home() {
     }
   };
 
-  const handleCreateSubmit = async (data: any) => {
+  const handleCreateSubmit = async (data: CreateConfigRequest) => {
     const success = await createConfig(data);
     if (success) {
       setShowCreateForm(false);
@@ -100,7 +103,7 @@ export default function Home() {
     return success;
   };
 
-  const handleEditSubmit = async (data: any) => {
+  const handleEditSubmit = async (data: UpdateConfigRequest) => {
     if (!editingConfig) return false;
     const success = await updateConfig(editingConfig.key, data);
     if (success) {
@@ -121,7 +124,6 @@ export default function Home() {
       <Layout
         style={{ minHeight: "100vh", backgroundColor: token.colorBgLayout }}
       >
-        {/* 头部 */}
         <Header
           style={{
             backgroundColor: "#fff",
@@ -151,10 +153,8 @@ export default function Home() {
           </Flex>
         </Header>
 
-        {/* 主要内容 */}
         <Content style={{ padding: "24px" }}>
           <div style={{ maxWidth: 1400, margin: "0 auto" }}>
-            {/* 工具栏 */}
             <Card style={{ marginBottom: 24 }}>
               <Flex
                 justify="space-between"
@@ -213,7 +213,6 @@ export default function Home() {
               </Flex>
             </Card>
 
-            {/* 错误提示 */}
             {error && (
               <Alert
                 message="操作失败"
@@ -225,7 +224,6 @@ export default function Home() {
               />
             )}
 
-            {/* 配置列表 */}
             <Card>
               {loading && configs.length === 0 ? (
                 <Flex
@@ -252,7 +250,6 @@ export default function Home() {
           </div>
         </Content>
 
-        {/* 创建配置表单 */}
         <ConfigForm
           isOpen={showCreateForm}
           onClose={() => setShowCreateForm(false)}
@@ -260,7 +257,6 @@ export default function Home() {
           title="新建配置"
         />
 
-        {/* 编辑配置表单 */}
         <ConfigForm
           isOpen={showEditForm}
           onClose={() => {
@@ -272,7 +268,6 @@ export default function Home() {
           title="编辑配置"
         />
 
-        {/* API测试器 */}
         <ApiTester
           open={showApiTester}
           onClose={() => setShowApiTester(false)}

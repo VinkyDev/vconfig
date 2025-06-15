@@ -29,7 +29,7 @@ interface ConfigFormProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (
-    data: CreateConfigRequest | UpdateConfigRequest
+    data: CreateConfigRequest & UpdateConfigRequest
   ) => Promise<boolean>;
   editingConfig?: ConfigItem | null;
   title: string;
@@ -46,7 +46,7 @@ export default function ConfigForm({
   const [loading, setLoading] = useState(false);
   const [dataType, setDataType] = useState<
     "string" | "number" | "boolean" | "json"
-  >();
+  >("json");
   const [jsonValue, setJsonValue] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [inputVisible, setInputVisible] = useState(false);
@@ -73,7 +73,9 @@ export default function ConfigForm({
     }
   }, [editingConfig, isOpen, form]);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (
+    values: CreateConfigRequest & UpdateConfigRequest
+  ) => {
     setLoading(true);
     try {
       // 验证JSON格式
@@ -100,7 +102,11 @@ export default function ConfigForm({
         handleClose();
       }
     } catch (error) {
-      message.error("操作失败，请重试");
+      message.error(
+        `操作失败，请重试: ${
+          error instanceof Error ? error.message : "未知错误"
+        }`
+      );
     } finally {
       setLoading(false);
     }
