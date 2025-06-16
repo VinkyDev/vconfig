@@ -16,10 +16,11 @@ import {
 import { PlusOutlined, CloseOutlined } from "@ant-design/icons";
 import Editor from "@monaco-editor/react";
 import {
-  ConfigItem,
+  ConfigItemResponse,
   CreateConfigRequest,
   UpdateConfigRequest,
 } from "@/types/config";
+import { convertValueToString } from "@/utils/convert";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -31,7 +32,7 @@ interface ConfigFormProps {
   onSubmit: (
     data: CreateConfigRequest & UpdateConfigRequest
   ) => Promise<boolean>;
-  editingConfig?: ConfigItem | null;
+  editingConfig?: ConfigItemResponse | null;
   title: string;
 }
 
@@ -54,16 +55,21 @@ export default function ConfigForm({
 
   useEffect(() => {
     if (editingConfig) {
+      const valueString = convertValueToString(
+        editingConfig.value,
+        editingConfig.type
+      );
+
       form.setFieldsValue({
         key: editingConfig.key,
-        value: editingConfig.value,
+        value: valueString,
         type: editingConfig.type,
         description: editingConfig.description || "",
       });
       setDataType(editingConfig.type);
       setTags(editingConfig.tags || []);
       if (editingConfig.type === "json") {
-        setJsonValue(editingConfig.value);
+        setJsonValue(valueString);
       }
     } else {
       form.resetFields();

@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ConfigItem, CreateConfigRequest, UpdateConfigRequest } from '@/types/config';
+import { ConfigItemResponse, CreateConfigRequest, UpdateConfigRequest } from '@/types/config';
 
 interface UseConfigsReturn {
-  configs: ConfigItem[];
+  configs: ConfigItemResponse[];
   loading: boolean;
   error: string | null;
   refreshConfigs: () => Promise<void>;
@@ -14,7 +14,7 @@ interface UseConfigsReturn {
 }
 
 export function useConfigs(): UseConfigsReturn {
-  const [configs, setConfigs] = useState<ConfigItem[]>([]);
+  const [configs, setConfigs] = useState<ConfigItemResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

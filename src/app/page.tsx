@@ -27,7 +27,7 @@ import ConfigForm from "@/components/ConfigForm";
 import ConfigList from "@/components/ConfigList";
 import ApiTester from "@/components/ApiTester";
 import {
-  ConfigItem,
+  ConfigItemResponse,
   CreateConfigRequest,
   UpdateConfigRequest,
 } from "@/types/config";
@@ -53,7 +53,7 @@ export default function Home() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showApiTester, setShowApiTester] = useState(false);
-  const [editingConfig, setEditingConfig] = useState<ConfigItem | null>(null);
+  const [editingConfig, setEditingConfig] = useState<ConfigItemResponse | null>(null);
   const [selectedConfigs, setSelectedConfigs] = useState<string[]>([]);
 
   const { token } = theme.useToken();
@@ -77,7 +77,7 @@ export default function Home() {
     }
   };
 
-  const handleEditConfig = (config: ConfigItem) => {
+  const handleEditConfig = (config: ConfigItemResponse) => {
     setEditingConfig(config);
     setShowEditForm(true);
   };

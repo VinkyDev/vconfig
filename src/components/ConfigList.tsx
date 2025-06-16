@@ -23,17 +23,17 @@ import {
   MoreOutlined,
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import { ConfigItem } from "@/types/config";
+import { ConfigItemResponse } from "@/types/config";
 
 const { Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
 interface ConfigListProps {
-  configs: ConfigItem[];
+  configs: ConfigItemResponse[];
   selectedConfigs: string[];
   onSelectConfig: (key: string) => void;
   onSelectAll: () => void;
-  onEditConfig: (config: ConfigItem) => void;
+  onEditConfig: (config: ConfigItemResponse) => void;
   onDeleteConfig: (key: string) => void;
 }
 
@@ -70,15 +70,27 @@ export default function ConfigList({
     }
   };
 
-  const formatValue = (value: string, type: string) => {
-    if (type === "json") {
-      try {
-        return JSON.stringify(JSON.parse(value), null, 2);
-      } catch {
-        return value;
-      }
+  const formatValue = (value: string | number | boolean | object, type: string) => {
+    if (type === "json" && typeof value === "object") {
+      return JSON.stringify(value, null, 2);
     }
-    return value;
+    return String(value);
+  };
+
+  // 获取用于复制的字符串值
+  const getValueForCopy = (value: string | number | boolean | object, type: string) => {
+    if (type === "json" && typeof value === "object") {
+      return JSON.stringify(value);
+    }
+    return String(value);
+  };
+
+  // 获取用于隐藏显示的长度
+  const getValueLength = (value: string | number | boolean | object) => {
+    if (typeof value === "object") {
+      return JSON.stringify(value).length;
+    }
+    return String(value).length;
   };
 
   const getTypeColor = (type: string) => {
@@ -102,7 +114,7 @@ export default function ConfigList({
     });
   };
 
-  const getDropdownItems = (config: ConfigItem) => [
+  const getDropdownItems = (config: ConfigItemResponse) => [
     {
       key: "edit",
       label: "编辑",
@@ -118,7 +130,7 @@ export default function ConfigList({
     },
   ];
 
-  const columns: ColumnsType<ConfigItem> = [
+  const columns: ColumnsType<ConfigItemResponse> = [
     {
       title: "配置键",
       dataIndex: "key",
@@ -153,11 +165,11 @@ export default function ConfigList({
       dataIndex: "value",
       key: "value",
       width: 300,
-      render: (value: string, record: ConfigItem) => {
+      render: (value: string | number | boolean | object, record: ConfigItemResponse) => {
         const isVisible = visibleValues.has(record.key);
         const displayValue = isVisible
           ? formatValue(value, record.type)
-          : "*".repeat(Math.min(value.length, 20));
+          : "*".repeat(Math.min(getValueLength(value), 20));
 
         return (
           <Flex align="flex-start" gap="small">
@@ -200,7 +212,7 @@ export default function ConfigList({
                   type="text"
                   size="small"
                   icon={<CopyOutlined />}
-                  onClick={() => copyToClipboard(value, "value")}
+                  onClick={() => copyToClipboard(getValueForCopy(value, record.type), "value")}
                 />
               </Tooltip>
             </Space>
