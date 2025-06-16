@@ -117,7 +117,7 @@ export default function ApiTester({ open, onClose }: ApiTesterProps) {
   const [selectedEndpoint, setSelectedEndpoint] = useState<ApiEndpoint>(
     apiEndpoints[0]
   );
-  const [requestUrl, setRequestUrl] = useState("");
+  const [requestUrl, setRequestUrl] = useState(apiEndpoints[0].path);
   const [requestBody, setRequestBody] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
