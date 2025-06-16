@@ -1,16 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ConfigService } from '@/lib/configService';
 import { CreateConfigRequest } from '@/types/config';
+import groupBy from 'lodash/groupBy';
 
 // GET /api/configs - 获取配置列表或搜索配置
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const keyword = searchParams.get('search');
-
+    const groupByKey = searchParams.get('groupByKey');
     const configs = keyword 
       ? await ConfigService.searchConfigs(keyword)
       : await ConfigService.getAllConfigs();
+
+    if (groupByKey) {
+      const groupConfig = groupBy(configs, 'key');
+      return NextResponse.json({
+        success: true,
+        data: groupConfig,
+      });
+    }
 
     return NextResponse.json({
       success: true,

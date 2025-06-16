@@ -39,6 +39,7 @@ interface ApiEndpoint {
     type: string;
     required: boolean;
     description: string;
+    groupByKey?: boolean;
   }[];
   requestBody?: string;
 }
@@ -54,6 +55,14 @@ const apiEndpoints: ApiEndpoint[] = [
         type: "string",
         required: false,
         description: "搜索关键词",
+        groupByKey: false,
+      },
+      {
+        name: "groupByKey",
+        type: "boolean",
+        required: false,
+        description: "是否按key分组",
+        groupByKey: true,
       },
     ],
   },
